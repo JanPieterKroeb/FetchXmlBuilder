@@ -39,5 +39,8 @@ jobs:
           -p:RepositoryUrl=https://github.com/JanPieterKroeb/FetchXmlBuilder \
           -o packages
 
-      - name: Publish NuGet package
+      - name: Publish NuGet package to Git
         run: dotnet nuget push packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://nuget.pkg.github.com/JanPieterKroeb/index.json
+
+      - name: Publish NuGet package to NuGet
+        run: dotnet nuget push packages/*.nupkg --api-key ${{ secrets.NUGET_V3_API_KEY }} --source https://api.nuget.org/v3/index.json
