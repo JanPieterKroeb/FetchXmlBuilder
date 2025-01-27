@@ -3,18 +3,18 @@ using FetchXmlBuilder.Domain;
 
 namespace FetchXmlBuilder
 {
-    public class FetchXmlBuilder
+    public class FetchXmlStringBuilder
     {
         private readonly StringBuilder _builder;
         private readonly Entity _mainEntity;
 
-        public FetchXmlBuilder(string entityName)
+        public FetchXmlStringBuilder(string entityName)
         {
            _builder = new StringBuilder("<fetch returntotalrecordcount=\"true\">");
            _mainEntity = new Entity(entityName);
         }
         
-        public FetchXmlBuilder(string entityName, int count, int page)
+        public FetchXmlStringBuilder(string entityName, int count, int page)
         {
             _builder = new StringBuilder($"<fetch returntotalrecordcount=\"true\" count=\"{count}\" page=\"{page}\">");
             _mainEntity = new Entity(entityName);
@@ -29,7 +29,7 @@ namespace FetchXmlBuilder
 
         public void AddCondition(Condition condition)
         {
-            _mainEntity.Conditions.Add(condition);
+            _mainEntity.ConditionsAnd.Add(condition);
         }
 
         public void AddLinkedEntity(LinkEntity entity)

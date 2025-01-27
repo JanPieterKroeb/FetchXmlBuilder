@@ -2,9 +2,10 @@
 {
     public class LinkEntity : Entity
     {
-        public LinkEntity(string entityName, string entityIdField, string linkedEntityName, string alias) : base(entityName)
+        public LinkEntity(string entityName, string from, string to, string alias) : base(entityName)
         {
-            OpeningTag = $"<link-entity name=\"{entityName}\" from=\"{entityIdField}\" to=\"{linkedEntityName}\" link-type=\"outer\" alias=\"{alias}\">";
+            // TODO: Remove hard-coded All-Attributes
+            OpeningTag = $"<link-entity name=\"{entityName}\" from=\"{from}\" to=\"{to}\" link-type=\"outer\" alias=\"{alias}\"><all-attributes />";
             ClosingTag = "</link-entity>";
         }
     }

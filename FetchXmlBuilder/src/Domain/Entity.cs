@@ -4,7 +4,8 @@ namespace FetchXmlBuilder.Domain
 {
     public class Entity
     {
-        public readonly List<Condition> Conditions = new List<Condition>();
+        public readonly List<Condition> ConditionsAnd = new List<Condition>();
+        public readonly List<Condition> ConditionsOr = new List<Condition>();
         public readonly List<Order> Orders = new List<Order>();
         public readonly List<LinkEntity> LinkEntities = new List<LinkEntity>();
         protected string OpeningTag;
@@ -12,7 +13,8 @@ namespace FetchXmlBuilder.Domain
 
         public Entity(string entityName)
         {
-            OpeningTag = $"<entity name=\"{entityName}\">";
+            // TODO: All-attributes optional
+            OpeningTag = $"<entity name=\"{entityName}\"><all-attributes />";
             ClosingTag = "</entity>";
         }
 
@@ -25,10 +27,10 @@ namespace FetchXmlBuilder.Domain
             var xmlString = OpeningTag;
             
             // Build filter
-            if (Conditions.Count > 0)
+            if (ConditionsAnd.Count > 0)
             {
                 xmlString += "<filter>";
-                foreach (var condition in Conditions)
+                foreach (var condition in ConditionsAnd)
                 {
                     xmlString += $"<condition attribute=\"{condition.Attribute}\" operator=\"{condition.Operator}\" value=\"{condition.Value}\" />";
                 }

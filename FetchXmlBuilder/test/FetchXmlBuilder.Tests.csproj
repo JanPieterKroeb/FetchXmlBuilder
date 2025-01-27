@@ -7,9 +7,11 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>TestProject1</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AwesomeAssertions" Version="7.1.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0"/>
         <PackageReference Include="NUnit" Version="3.13.3"/>
         <PackageReference Include="NUnit3TestAdapter" Version="4.2.1"/>
@@ -19,6 +21,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\src\FetchXmlBuilder.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="LinkTests\" />
     </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{524A43C4-C1E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4F84ABEF-E2AA-4C83-8A56-697CE658DAB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "test\TestProject1.csproj", "{6D5EA15A-30E3-4C5B-9966-11FC241D4746}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchXmlBuilder.Tests", "test\FetchXmlBuilder.Tests.csproj", "{6D5EA15A-30E3-4C5B-9966-11FC241D4746}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
