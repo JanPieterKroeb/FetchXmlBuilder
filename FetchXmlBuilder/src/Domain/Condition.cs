@@ -1,6 +1,6 @@
 ﻿namespace FetchXmlBuilder.Domain
 {
-    public class Condition
+    internal class Condition
     {
         public readonly string Attribute;
         public readonly string Operator;

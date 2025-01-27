@@ -1,17 +1,17 @@
 ﻿namespace FetchXmlBuilder.Domain
 {
-    public class Order
+    internal class Order
     {
         public readonly string Attribute;
         public readonly bool IsDescending;
 
-        public Order(string attribute)
+        internal Order(string attribute)
         {
             Attribute = attribute;
             IsDescending = true;
         }
 
-        public Order(string attribute, bool isDescending)
+        internal Order(string attribute, bool isDescending)
         {
             Attribute = attribute;
             IsDescending = isDescending;

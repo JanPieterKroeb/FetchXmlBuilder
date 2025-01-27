@@ -3,7 +3,7 @@ using FetchXmlBuilder.Domain;
 
 namespace FetchXmlBuilder
 {
-    public class FetchXmlStringBuilder
+    internal class FetchXmlStringBuilder
     {
         private readonly StringBuilder _builder;
         private readonly Entity _mainEntity;

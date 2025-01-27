@@ -7,7 +7,7 @@ using FetchXmlBuilder.Domain.Enums;
 
 namespace FetchXmlBuilder.Helper
 {
-    public class ConditionExpressionVisitor<T>
+    internal class ConditionExpressionVisitor<T>
     {
         public IEnumerable<Condition> GetConditionsFromLambdaExpression(LambdaExpression lambdaExpression) =>
             GetConditionsFromAllExpressions(lambdaExpression.Body);

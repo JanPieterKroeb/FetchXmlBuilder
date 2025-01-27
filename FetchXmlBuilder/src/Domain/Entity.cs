@@ -2,7 +2,7 @@
 
 namespace FetchXmlBuilder.Domain
 {
-    public class Entity
+    internal class Entity
     {
         public readonly List<Condition> ConditionsAnd = new List<Condition>();
         public readonly List<Condition> ConditionsOr = new List<Condition>();
