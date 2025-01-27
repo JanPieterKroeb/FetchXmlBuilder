@@ -31,11 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: netstandard2.1
-
       - name: Generate NuGet package
         run: |
           dotnet pack FetchXmlBuilder/src/ \
