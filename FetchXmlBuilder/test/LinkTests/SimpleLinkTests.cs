@@ -13,7 +13,7 @@ public class SimpleLinkTests
         var actualXmlString = _entityToFetchXmlBuilder
             .For<Song>("song")
             .LinkEntity<Artist>(
-                s => s.For<Artist>(song => song.Artist, null),
+                s => s.For<Artist>(song => song.Artist),
                 a => a.ArtistId,
                 s => s.CreatedBy)
             .ToFetchXmlString();
