@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using TestProject1.FilterTests;
+using TestProject1.FilterTests.DataModel;
+using TestProject1.LinkTests.DataModel;
 
 namespace TestProject1.LinkTests;
 
@@ -32,6 +34,20 @@ public class SimpleLinkTests
                 s => s.CreatedBy)
             .ToFetchXmlString();
         const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"song\"><all-attributes /><link-entity name=\"Artist\" from=\"ArtistId\" to=\"CreatedBy\" link-type=\"outer\" alias=\"spotify_artist\"><all-attributes /></link-entity></entity></fetch>";
+        actualXmlString.Should().BeEquivalentTo(expected);
+    }
+    
+    [Test]
+    public void SingleLinkTest_WithNullableEntity()
+    {
+        var actualXmlString = _entityToFetchXmlBuilder
+            .For<Movie>("movie")
+            .LinkEntity<Director>(
+                s => s.For<Director>(m => m.Director, "test"),
+                d => d.PersonId,
+                m => m.DirectorId)
+            .ToFetchXmlString();
+        const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"movie\"><all-attributes /><link-entity name=\"Director\" from=\"PersonId\" to=\"DirectorId\" link-type=\"outer\" alias=\"test\"><all-attributes /></link-entity></entity></fetch>";
         actualXmlString.Should().BeEquivalentTo(expected);
     }
 }

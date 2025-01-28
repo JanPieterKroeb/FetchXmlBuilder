@@ -59,16 +59,27 @@ namespace FetchXmlBuilder.Builders
                     var argument = methodCallExpression.Arguments[0];
 
                     // Handle a lambda expression within the 'For' call
-                    if (argument is UnaryExpression { Operand: LambdaExpression { Body: MemberExpression memberExpression } })
+                    if (argument is UnaryExpression { Operand: LambdaExpression lambdaExpression })
                         // Get the property access (MemberExpression) inside the lambda
                     {
-                        if (methodCallExpression.Arguments.Count == 2 &&
-                            methodCallExpression.Arguments[1] is ConstantExpression constantExpression)
+                        // TODO: Fix ugly block
+                        switch (lambdaExpression.Body)
                         {
-                            return new LinkEntityProperties(memberExpression.Member.Name,
-                                constantExpression.Value?.ToString());
+                            case MemberExpression memberExpression when
+                                methodCallExpression.Arguments.Count == 2 &&
+                                methodCallExpression.Arguments[1] is ConstantExpression constantExpression:
+                                return new LinkEntityProperties(memberExpression.Member.Name,
+                                    constantExpression.Value?.ToString());
+                            case MemberExpression memberExpression:
+                                return new LinkEntityProperties(memberExpression.Member.Name);
+                            case UnaryExpression { Operand: MemberExpression nullableMemberExpression } when
+                                methodCallExpression.Arguments.Count == 2 &&
+                                methodCallExpression.Arguments[1] is ConstantExpression constantExpression:
+                                return new LinkEntityProperties(nullableMemberExpression.Member.Name,
+                                    constantExpression.Value?.ToString());
+                            case UnaryExpression { Operand: MemberExpression nullableMemberExpression }:
+                                return new LinkEntityProperties(nullableMemberExpression.Member.Name);
                         }
-                        return new LinkEntityProperties(memberExpression.Member.Name);
                     }
                 }
                 else
