@@ -32,10 +32,15 @@ namespace FetchXmlBuilder.Builders
             Expression<Func<T, object>> toExpression)
         {
             // TODO: Add conditions to linked entities
-            var linkEntityName = GetLinkEntityName(expandExpressionString);
+            var linkEntityName = GetLinkEntityProperties(expandExpressionString);
             var fromField = ExtractPropertyName(fromExpression);
             var toField = ExtractPropertyName(toExpression);
-            _queryStringBuilder.AddLinkedEntity(new LinkEntity(linkEntityName, fromField, toField, linkEntityName));
+            
+            _queryStringBuilder.AddLinkedEntity(new LinkEntity(
+                linkEntityName.EntityName,
+                fromField,
+                toField,
+                linkEntityName.Alias ?? linkEntityName.EntityName));
             return this;
         }
         
@@ -44,12 +49,12 @@ namespace FetchXmlBuilder.Builders
             return _queryStringBuilder.ToFetchXml();
         }
 
-        private static string GetLinkEntityName(Expression<Func<ILinkEntityResource<T>, object>> expandExpression)
+        private static LinkEntityProperties GetLinkEntityProperties(Expression<Func<ILinkEntityResource<T>, object>> expandExpression)
         {
             if (expandExpression.Body is MethodCallExpression methodCallExpression)
             {
                 // Check if the method call is 'For' and get its argument
-                if (methodCallExpression.Method.Name == "For" && methodCallExpression.Arguments.Count == 1)
+                if (methodCallExpression.Method.Name == "For")
                 {
                     var argument = methodCallExpression.Arguments[0];
 
@@ -57,7 +62,13 @@ namespace FetchXmlBuilder.Builders
                     if (argument is UnaryExpression { Operand: LambdaExpression { Body: MemberExpression memberExpression } })
                         // Get the property access (MemberExpression) inside the lambda
                     {
-                        return memberExpression.Member.Name;
+                        if (methodCallExpression.Arguments.Count == 2 &&
+                            methodCallExpression.Arguments[1] is ConstantExpression constantExpression)
+                        {
+                            return new LinkEntityProperties(memberExpression.Member.Name,
+                                constantExpression.Value?.ToString());
+                        }
+                        return new LinkEntityProperties(memberExpression.Member.Name);
                     }
                 }
                 else

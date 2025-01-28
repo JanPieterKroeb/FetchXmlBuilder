@@ -5,12 +5,6 @@ namespace TestProject1.FilterTests;
 public class SimpleFilterTests
 {
     private readonly FetchXmlBuilder.Builder _entityToFetchXmlBuilder = new();
-
-    [Test]
-    public void BinaryExpressionTest_EqualToNonNull()
-    {
-
-    }
     
     [Test]
     public void BinaryExpressionTest_()
@@ -50,8 +44,8 @@ public class SimpleFilterTests
     {
         var actualXmlString = _entityToFetchXmlBuilder
             .For<Song>("song")
-            .LinkEntity<Artist>(s => s
-                    .For<Artist>(song => song.Artist),
+            .LinkEntity<Artist>(
+                s => s.For<Artist>(song => song.Artist, null),
                 a => a.ArtistId,
                 s => s.CreatedBy)
             .Filter(a => a.Name.StartsWith("Cry for") && a.IsOnSpotify)

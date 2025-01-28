@@ -4,10 +4,10 @@ namespace FetchXmlBuilder.Domain
 {
     internal class Entity
     {
-        public readonly List<Condition> ConditionsAnd = new List<Condition>();
-        public readonly List<Condition> ConditionsOr = new List<Condition>();
-        public readonly List<Order> Orders = new List<Order>();
-        public readonly List<LinkEntity> LinkEntities = new List<LinkEntity>();
+        internal readonly List<Condition> ConditionsAnd = new List<Condition>();
+        internal readonly List<Condition> ConditionsOr = new List<Condition>();
+        internal readonly List<Order> Orders = new List<Order>();
+        internal readonly List<LinkEntity> LinkEntities = new List<LinkEntity>();
         protected string OpeningTag;
         protected string ClosingTag;
 
