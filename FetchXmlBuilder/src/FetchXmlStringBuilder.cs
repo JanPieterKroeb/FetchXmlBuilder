@@ -24,7 +24,9 @@ namespace FetchXmlBuilder
         {
             _builder.Append(_mainEntity);
             _builder.Append("</fetch>");
-            return _builder.ToString();
+            var fetchXml = _builder.ToString();
+            _builder.Clear();
+            return fetchXml;
         }
 
         public void AddCondition(Condition condition)
