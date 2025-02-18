@@ -20,12 +20,16 @@ public class AggregateFetchXmlBuilder<T, TEntityQuery>
     /// <inheritdoc/>
     public IFetchXmlAggregateMethods<T> Aggregate(Expression<Func<T, object>> field, AggregateOperation operation, string alias, bool isDistinct)
     {
-        if (field.Body is UnaryExpression { Operand: MemberExpression mex })
+        switch (field.Body)
         {
-            QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
-            return this;
+            case UnaryExpression { Operand: MemberExpression mex }:
+                QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
+                return this;
+            // case MemberExpression mex:
+            //     QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
+            //     return this;
+            default:
+                throw new InvalidOperationException("Could not get member");
         }
-    
-        throw new InvalidOperationException("Could not get member");
     }
 }

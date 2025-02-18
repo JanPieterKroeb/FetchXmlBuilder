@@ -48,4 +48,13 @@ public class SimpleAggregateTests
         var expected = "<fetch distinct=\"False\" aggregate=\"true\"><entity name=\"person\"><filter><condition attribute=\"Gender\" operator=\"eq\" value=\"1\" /><condition attribute=\"Function\" operator=\"eq\" value=\"Office Manager\" /></filter><attribute name=\"Salary\" alias=\"minSalary\" aggregate=\"min\" distinct=\"False\"/><attribute name=\"Salary\" alias=\"maxSalary\" aggregate=\"max\" distinct=\"False\"/><attribute name=\"Salary\" alias=\"averageSalary\" aggregate=\"avg\" distinct=\"False\"/></entity></fetch>";
         actual.Should().BeEquivalentTo(expected);
     }
+
+    [Test]
+    public void a()
+    {
+        _aggregateQueryBuilder
+            .AggregateFor<AccountXmlRequestFields>("account", false)
+            .Aggregate(a => a.accountnumber, AggregateOperation.CountColumn,
+                "amountOfAccounts", false);
+    }
 }
