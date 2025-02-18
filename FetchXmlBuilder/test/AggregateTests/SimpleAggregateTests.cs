@@ -45,7 +45,7 @@ public class SimpleAggregateTests
             .Filter(p => p.Function == "Office Manager")
             .ToFetchXmlString();
         
-        var expected = "<fetch distinct=\"False\" aggregate=\"true\"><entity name=\"person\"><attribute name=\"Salary\" alias=\"averageSalary\" aggregate=\"avg\" distinct=\"False\"/></entity></fetch>";
+        var expected = "<fetch distinct=\"False\" aggregate=\"true\"><entity name=\"person\"><filter><condition attribute=\"Gender\" operator=\"eq\" value=\"1\" /><condition attribute=\"Function\" operator=\"eq\" value=\"Office Manager\" /></filter><attribute name=\"Salary\" alias=\"minSalary\" aggregate=\"min\" distinct=\"False\"/><attribute name=\"Salary\" alias=\"maxSalary\" aggregate=\"max\" distinct=\"False\"/><attribute name=\"Salary\" alias=\"averageSalary\" aggregate=\"avg\" distinct=\"False\"/></entity></fetch>";
         actual.Should().BeEquivalentTo(expected);
     }
 }
