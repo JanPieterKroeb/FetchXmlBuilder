@@ -1,8 +1,7 @@
-﻿namespace FetchXmlBuilder.Domain.Enums
+﻿namespace FetchXmlBuilder.Domain.Enums;
+
+internal enum FilterType
 {
-    internal enum FilterType
-    {
-        And,
-        Or
-    }
+    And,
+    Or
 }

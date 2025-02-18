@@ -1,9 +1,8 @@
-﻿namespace FetchXmlBuilder.Domain.Enums
+﻿namespace FetchXmlBuilder.Domain.Enums;
+
+internal struct SupportedLinqMethods
 {
-    internal struct SupportedLinqMethods
-    {
-        public const string StartsWith = "StartsWith";
-        public const string EndsWith = "EndsWith";
-        public const string Contains = "Contains";
-    }
+    public const string StartsWith = "StartsWith";
+    public const string EndsWith = "EndsWith";
+    public const string Contains = "Contains";
 }

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using TestProject1.FilterTests;
 using TestProject1.FilterTests.DataModel;
 using TestProject1.LinkTests.DataModel;
 
@@ -7,7 +6,7 @@ namespace TestProject1.LinkTests;
 
 public class SimpleLinkTests
 {
-    private readonly FetchXmlBuilder.Builder _entityToFetchXmlBuilder = new();
+    private readonly FetchXmlBuilder.QueryBuilder _entityToFetchXmlBuilder = new();
 
     [Test]
     public void SingleLinkTest()

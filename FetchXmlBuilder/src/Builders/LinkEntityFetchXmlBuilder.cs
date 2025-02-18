@@ -1,9 +1,6 @@
-namespace FetchXmlBuilder.Builders
-{
-    internal class LinkEntityFetchXmlBuilder<TLinkEntity> : EntityFetchXmlBuilder<TLinkEntity>
-    {
-        public LinkEntityFetchXmlBuilder(string entityName) : base(entityName)
-        {
-        }
-    }
-}
+using FetchXmlBuilder.Domain;
+
+namespace FetchXmlBuilder.Builders;
+
+internal class LinkEntityFetchXmlBuilder<TLinkEntity>(string entityName)
+    : EntityFetchXmlBuilder<TLinkEntity, EntityQuery>(entityName) where TLinkEntity : EntityQuery;

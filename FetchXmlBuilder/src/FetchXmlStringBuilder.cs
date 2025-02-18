@@ -1,47 +1,60 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using FetchXmlBuilder.Domain;
+using FetchXmlBuilder.Domain.EntityProperties;
+using FetchXmlBuilder.Interfaces;
+using Attribute = FetchXmlBuilder.Domain.EntityProperties.Attribute;
 
-namespace FetchXmlBuilder
+namespace FetchXmlBuilder;
+
+internal class FetchXmlStringBuilder<TEntity> : IFetchXmlStringBuilder where TEntity : EntityQuery
 {
-    internal class FetchXmlStringBuilder
+    protected StringBuilder _builder;
+    private readonly TEntity _mainEntity;
+    protected string OpeningTag;
+    private const string ClosingTag = "</fetch>";
+
+    public FetchXmlStringBuilder(string entityName)
     {
-        private readonly StringBuilder _builder;
-        private readonly Entity _mainEntity;
-
-        public FetchXmlStringBuilder(string entityName)
-        {
-           _builder = new StringBuilder("<fetch returntotalrecordcount=\"true\">");
-           _mainEntity = new Entity(entityName);
-        }
+        OpeningTag = "<fetch returntotalrecordcount=\"true\">";
+        _builder = new StringBuilder(OpeningTag);
+        _mainEntity = (TEntity)Activator.CreateInstance(typeof(TEntity), [entityName]);
+    }
         
-        public FetchXmlStringBuilder(string entityName, int count, int page)
-        {
-            _builder = new StringBuilder($"<fetch returntotalrecordcount=\"true\" count=\"{count}\" page=\"{page}\">");
-            _mainEntity = new Entity(entityName);
-        }
+    public FetchXmlStringBuilder(string entityName, int count, int page)
+    {
+        OpeningTag = $"<fetch returntotalrecordcount=\"true\" count=\"{count}\" page=\"{page}\">";
+        _builder = new StringBuilder(OpeningTag);
+        _mainEntity = (TEntity)Activator.CreateInstance(typeof(TEntity), [entityName]);
+    }
         
-        public string ToFetchXml()
-        {
-            _builder.Append(_mainEntity);
-            _builder.Append("</fetch>");
-            var fetchXml = _builder.ToString();
-            _builder.Clear();
-            return fetchXml;
-        }
+    public string ToFetchXml()
+    {
+        _builder.Append(_mainEntity);
+        _builder.Append(ClosingTag);
+        var fetchXml = _builder.ToString();
+        _builder.Clear();
+        _builder.Append(OpeningTag);
+        return fetchXml;
+    }
 
-        public void AddCondition(Condition condition)
-        {
-            _mainEntity.ConditionsAnd.Add(condition);
-        }
+    public void AddCondition(Condition condition)
+    {
+        _mainEntity.ConditionsAnd.Add(condition);
+    }
 
-        public void AddLinkedEntity(LinkEntity entity)
-        {
-            _mainEntity.LinkEntities.Add(entity);
-        }
+    public void AddLinkedEntity(LinkEntity entity)
+    {
+        _mainEntity.LinkEntities.Add(entity);
+    }
 
-        public void AddOrder(Order order)
-        {
-            _mainEntity.Orders.Add(order);
-        }
+    public void AddOrder(Order order)
+    {
+        _mainEntity.Orders.Add(order);
+    }
+
+    public void AddAttribute(Attribute attribute)
+    {
+        _mainEntity.Attributes.Add(attribute);
     }
 }

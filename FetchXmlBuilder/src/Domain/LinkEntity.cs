@@ -1,12 +1,11 @@
-﻿namespace FetchXmlBuilder.Domain
+﻿namespace FetchXmlBuilder.Domain.EntityProperties;
+
+internal class LinkEntity : StandardEntityQuery
 {
-    internal class LinkEntity : Entity
+    internal LinkEntity(string entityName, string from, string to, string alias) : base(entityName)
     {
-        internal LinkEntity(string entityName, string from, string to, string alias) : base(entityName)
-        {
-            // TODO: Remove hard-coded All-Attributes
-            OpeningTag = $"<link-entity name=\"{entityName}\" from=\"{from}\" to=\"{to}\" link-type=\"outer\" alias=\"{alias}\"><all-attributes />";
-            ClosingTag = "</link-entity>";
-        }
+        // TODO: Remove hard-coded All-Attributes
+        OpeningTag = $"<link-entity name=\"{entityName}\" from=\"{from}\" to=\"{to}\" link-type=\"outer\" alias=\"{alias}\"><all-attributes />";
+        ClosingTag = "</link-entity>";
     }
 }

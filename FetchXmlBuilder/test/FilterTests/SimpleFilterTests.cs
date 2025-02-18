@@ -5,7 +5,7 @@ namespace TestProject1.FilterTests;
 
 public class SimpleFilterTests
 {
-    private readonly FetchXmlBuilder.Builder _entityToFetchXmlBuilder = new();
+    private readonly FetchXmlBuilder.QueryBuilder _entityToFetchXmlBuilder = new();
     
     [Test]
     public void BinaryExpressionTest_()
