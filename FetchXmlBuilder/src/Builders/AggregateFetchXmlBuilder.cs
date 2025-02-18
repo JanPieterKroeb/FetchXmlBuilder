@@ -25,9 +25,9 @@ public class AggregateFetchXmlBuilder<T, TEntityQuery>
             case UnaryExpression { Operand: MemberExpression mex }:
                 QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
                 return this;
-            // case MemberExpression mex:
-            //     QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
-            //     return this;
+            case MemberExpression mex:
+                QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
+                return this;
             default:
                 throw new InvalidOperationException("Could not get member");
         }
