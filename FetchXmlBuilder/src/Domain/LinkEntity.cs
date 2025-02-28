@@ -1,4 +1,4 @@
-﻿namespace FetchXmlBuilder.Domain.EntityProperties;
+﻿namespace FetchXmlBuilder.Domain;
 
 internal class LinkEntity : StandardEntityQuery
 {

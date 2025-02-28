@@ -1,4 +1,6 @@
+using FetchXmlBuilder.Domain;
 using FetchXmlBuilder.Domain.EntityProperties;
+using FetchXmlBuilder.Domain.EntityProperties.Attributes;
 
 namespace FetchXmlBuilder.Interfaces;
 
@@ -11,5 +13,5 @@ internal interface IFetchXmlStringBuilder
 
     public void AddOrder(Order order);
 
-    public void AddAttribute(Attribute attribute);
+    public void AddAttribute(BaseAttribute baseAttribute);
 }

@@ -1,6 +1,6 @@
 using FetchXmlBuilder.Domain.Enums;
 
-namespace FetchXmlBuilder.Domain.EntityProperties;
+namespace FetchXmlBuilder.Domain.EntityProperties.Attributes;
 
 internal class AggregateFields(AggregateOperation operation, bool isDistinct)
 {

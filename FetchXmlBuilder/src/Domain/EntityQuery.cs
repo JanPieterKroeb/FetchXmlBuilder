@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using FetchXmlBuilder.Domain.EntityProperties;
+using FetchXmlBuilder.Domain.EntityProperties.Attributes;
 
 namespace FetchXmlBuilder.Domain;
 
 public abstract class EntityQuery
 {
-    internal readonly List<Attribute> Attributes = [];
+    internal readonly List<BaseAttribute> Attributes = [];
     internal readonly List<Condition> ConditionsAnd = [];
     internal readonly List<Condition> ConditionsOr = [];
     internal readonly List<Order> Orders = [];

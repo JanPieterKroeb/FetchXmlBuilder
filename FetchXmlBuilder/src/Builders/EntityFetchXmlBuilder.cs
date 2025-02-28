@@ -2,8 +2,11 @@
 using System.Linq.Expressions;
 using FetchXmlBuilder.Domain;
 using FetchXmlBuilder.Domain.EntityProperties;
+using FetchXmlBuilder.Domain.EntityProperties.Attributes;
+using FetchXmlBuilder.Domain.Enums;
 using FetchXmlBuilder.Helper;
 using FetchXmlBuilder.Interfaces;
+using FetchXmlBuilder.ParameterOptions;
 using FetchXmlBuilder.Tasks.Link;
 
 namespace FetchXmlBuilder.Builders;
@@ -39,6 +42,33 @@ public class EntityFetchXmlBuilder<T, TEntityQuery>(string entityName) : IFetchX
             linkEntityName.Alias ?? linkEntityName.EntityName));
         return this;
     }
+
+    public IFetchXmlQueryMethods<T> FilterByHierarchy(Expression<Func<T, object>> primaryKeyExpression,
+        Guid primaryKeyValue,
+        HierarchyFilterOptions option)
+    {
+        var propertyName = ExtractPropertyName(primaryKeyExpression);
+
+        var operation = option switch
+        {
+            HierarchyFilterOptions.Under => HierarchyFilterOperation.Under,
+            HierarchyFilterOptions.UnderOrEqual => HierarchyFilterOperation.UnderOrEqual,
+            HierarchyFilterOptions.Above => HierarchyFilterOperation.Above,
+            HierarchyFilterOptions.AboveOrEqual => HierarchyFilterOperation.AboveOrEqual,
+            HierarchyFilterOptions.NotUnder => HierarchyFilterOperation.NotUnder,
+            _ => throw new ArgumentOutOfRangeException(nameof(option), option, null)
+        };
+        QueryStringBuilder.AddCondition(new Condition(propertyName, operation, primaryKeyValue.ToString()));
+        return this;
+    }
+    
+    public IFetchXmlQueryMethods<T> CountChildren(Expression<Func<T, object>> primaryKeyExpression, string variableName)
+    {
+        var propertyName = ExtractPropertyName(primaryKeyExpression);
+
+        QueryStringBuilder.AddAttribute(new AggregateRowAttribute(propertyName, variableName));
+        return this;
+    }
         
     public string ToFetchXmlString()
     {
@@ -62,15 +92,13 @@ public class EntityFetchXmlBuilder<T, TEntityQuery>(string entityName) : IFetchX
                     switch (lambdaExpression.Body)
                     {
                         case MemberExpression memberExpression when
-                            methodCallExpression.Arguments.Count == 2 &&
-                            methodCallExpression.Arguments[1] is ConstantExpression constantExpression:
+                            methodCallExpression.Arguments is [_, ConstantExpression constantExpression]:
                             return new LinkEntityProperties(memberExpression.Member.Name,
                                 constantExpression.Value?.ToString());
                         case MemberExpression memberExpression:
                             return new LinkEntityProperties(memberExpression.Member.Name);
                         case UnaryExpression { Operand: MemberExpression nullableMemberExpression } when
-                            methodCallExpression.Arguments.Count == 2 &&
-                            methodCallExpression.Arguments[1] is ConstantExpression constantExpression:
+                            methodCallExpression.Arguments is [_, ConstantExpression constantExpression]:
                             return new LinkEntityProperties(nullableMemberExpression.Member.Name,
                                 constantExpression.Value?.ToString());
                         case UnaryExpression { Operand: MemberExpression nullableMemberExpression }:

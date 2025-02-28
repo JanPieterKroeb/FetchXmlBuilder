@@ -2,8 +2,8 @@
 using System.Text;
 using FetchXmlBuilder.Domain;
 using FetchXmlBuilder.Domain.EntityProperties;
+using FetchXmlBuilder.Domain.EntityProperties.Attributes;
 using FetchXmlBuilder.Interfaces;
-using Attribute = FetchXmlBuilder.Domain.EntityProperties.Attribute;
 
 namespace FetchXmlBuilder;
 
@@ -53,8 +53,8 @@ internal class FetchXmlStringBuilder<TEntity> : IFetchXmlStringBuilder where TEn
         _mainEntity.Orders.Add(order);
     }
 
-    public void AddAttribute(Attribute attribute)
+    public void AddAttribute(BaseAttribute baseAttribute)
     {
-        _mainEntity.Attributes.Add(attribute);
+        _mainEntity.Attributes.Add(baseAttribute);
     }
 }

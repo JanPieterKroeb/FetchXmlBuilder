@@ -48,10 +48,10 @@ public class SimpleFilterTests
             .Filter(a => a.Name.StartsWith("Cry for") && a.IsOnSpotify)
             .LinkEntity<Artist>(
                 s => s.For<Artist>(song => song.Artist, null),
-                a => a.ArtistId,
+                a => a.Id,
                 s => s.CreatedBy)
             .ToFetchXmlString();
-        const string expected3 = "<fetch returntotalrecordcount=\"true\"><entity name=\"song\"><all-attributes /><filter><condition attribute=\"Name\" operator=\"like\" value=\"Cry for%\" /><condition attribute=\"IsOnSpotify\" operator=\"eq\" value=\"1\" /></filter><link-entity name=\"Artist\" from=\"ArtistId\" to=\"CreatedBy\" link-type=\"outer\" alias=\"Artist\"><all-attributes /></link-entity></entity></fetch>";
+        const string expected3 = "<fetch returntotalrecordcount=\"true\"><entity name=\"song\"><all-attributes /><filter><condition attribute=\"Name\" operator=\"like\" value=\"Cry for%\" /><condition attribute=\"IsOnSpotify\" operator=\"eq\" value=\"1\" /></filter><link-entity name=\"Artist\" from=\"Id\" to=\"CreatedBy\" link-type=\"outer\" alias=\"Artist\"><all-attributes /></link-entity></entity></fetch>";
         actualXmlString.Should().BeEquivalentTo(expected3);
     }
 }

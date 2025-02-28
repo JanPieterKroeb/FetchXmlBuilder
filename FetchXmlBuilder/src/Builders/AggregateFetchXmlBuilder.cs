@@ -1,10 +1,9 @@
 using System;
 using System.Linq.Expressions;
 using FetchXmlBuilder.Domain;
-using FetchXmlBuilder.Domain.EntityProperties;
+using FetchXmlBuilder.Domain.EntityProperties.Attributes;
 using FetchXmlBuilder.Domain.Enums;
 using FetchXmlBuilder.Interfaces;
-using Attribute = FetchXmlBuilder.Domain.EntityProperties.Attribute;
 
 namespace FetchXmlBuilder.Builders;
 
@@ -23,10 +22,10 @@ public class AggregateFetchXmlBuilder<T, TEntityQuery>
         switch (field.Body)
         {
             case UnaryExpression { Operand: MemberExpression mex }:
-                QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
+                QueryStringBuilder.AddAttribute(new AggregateAttribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
                 return this;
             case MemberExpression mex:
-                QueryStringBuilder.AddAttribute(new Attribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
+                QueryStringBuilder.AddAttribute(new AggregateAttribute(mex.Member.Name, alias, new AggregateFields(operation, isDistinct)));
                 return this;
             default:
                 throw new InvalidOperationException("Could not get member");
