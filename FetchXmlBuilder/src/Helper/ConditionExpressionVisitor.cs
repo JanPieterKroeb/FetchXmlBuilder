@@ -136,13 +136,18 @@ internal class ConditionExpressionVisitor<T>
         throw new InvalidOperationException();
     }
 
-    private static string? GetValueFromExpression(Expression expression) => expression switch
+    private static string? GetValueFromExpression(Expression expression)
     {
-        MemberExpression memberExpression => GetValueOfMemberExpression(memberExpression),
-        ConstantExpression constantExpression => GetValueFromConstantExpression(constantExpression),
-        _ => throw new InvalidOperationException()
-    };
-        
+        return expression switch
+        {
+            MemberExpression memberExpression => GetValueOfMemberExpression(memberExpression),
+            ConstantExpression constantExpression => GetValueFromConstantExpression(constantExpression),
+            UnaryExpression unaryExpression when unaryExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) =>
+                GetValueFromExpression(unaryExpression.Operand),
+            _ => throw new InvalidOperationException()
+        };
+    }
+
     private static string GetValueFromConstantExpression(ConstantExpression constantExpression) =>
         constantExpression.Value.ToString();
         

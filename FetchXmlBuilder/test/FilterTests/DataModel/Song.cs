@@ -3,5 +3,7 @@
 public record Song(
     string Name,
     Artist Artist,
+    Guid? ArtistId,
     Guid CreatedBy,
-    bool IsOnSpotify);
+    bool IsOnSpotify,
+    int? ListenAmount);
