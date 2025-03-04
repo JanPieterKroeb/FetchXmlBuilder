@@ -71,4 +71,16 @@ public class SimpleFilterTests
         const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"song\"><all-attributes /><filter><condition attribute=\"ListenAmount\" operator=\"eq\" value=\"500\" /></filter></entity></fetch>";
         actualXmlString.Should().BeEquivalentTo(expected);
     }
+
+    [Test]
+    public void FilterByObjectsFieldValue()
+    {
+        var anonymousMatchingObject = new { Name = "Pandora" };
+        var actualXmlString = _entityToFetchXmlBuilder
+            .For<Company>("company")
+            .Filter(c => c.Name == anonymousMatchingObject.Name)
+            .ToFetchXmlString();
+        var expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"company\"><all-attributes /><filter><condition attribute=\"Name\" operator=\"eq\" value=\"Pandora\" /></filter></entity></fetch>";
+        actualXmlString.Should().BeEquivalentTo(expected);
+    }
 }

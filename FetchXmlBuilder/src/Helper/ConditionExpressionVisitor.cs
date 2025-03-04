@@ -31,6 +31,7 @@ internal class ConditionExpressionVisitor<T>
                         conditions.Add(GetConditionFromExpression(actualBinaryExpression, negate));
                         break;
                 }
+
                 return conditions;
             }
             case UnaryExpression { NodeType: ExpressionType.Not } unaryExpression:
@@ -45,7 +46,8 @@ internal class ConditionExpressionVisitor<T>
     {
         return expression switch
         {
-            MethodCallExpression methodCallExpression => GetConditionFromMethodCallExpression(methodCallExpression, negate),
+            MethodCallExpression methodCallExpression => GetConditionFromMethodCallExpression(methodCallExpression,
+                negate),
             LambdaExpression lambdaExpression => GetConditionFromLambdaExpression(lambdaExpression),
             BinaryExpression binaryExpression => GetConditionFromNonLogicalBinaryExpression(binaryExpression, negate),
             MemberExpression memberExpression => GetConditionFromBooleanMemberField(memberExpression, negate),
@@ -66,9 +68,10 @@ internal class ConditionExpressionVisitor<T>
                 XmlOperations.Equal,
                 negate ? "0" : "1");
         }
+
         throw new NotImplementedException();
     }
-        
+
     private static Condition GetConditionFromNonLogicalBinaryExpression(BinaryExpression binaryExpression, bool negate)
     {
         MemberExpression memberExpression;
@@ -107,10 +110,10 @@ internal class ConditionExpressionVisitor<T>
             };
         }
 
-                
+
         return new Condition(memberExpression.Member.Name, @operator, value ?? "");
     }
-        
+
     private static Condition GetConditionFromMethodCallExpression(MethodCallExpression methodExpression, bool negate)
     {
         if (methodExpression.Object is MemberExpression expression && GetParentType(expression) == typeof(T))
@@ -133,6 +136,7 @@ internal class ConditionExpressionVisitor<T>
                 _ => throw new NotImplementedException("Unsupported method!")
             };
         }
+
         throw new InvalidOperationException();
     }
 
@@ -140,9 +144,10 @@ internal class ConditionExpressionVisitor<T>
     {
         return expression switch
         {
-            MemberExpression memberExpression => GetValueOfMemberExpression(memberExpression),
+            MemberExpression memberExpression => GetValueOfMemberExpression(memberExpression).ToString(),
             ConstantExpression constantExpression => GetValueFromConstantExpression(constantExpression),
-            UnaryExpression unaryExpression when unaryExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>) =>
+            UnaryExpression unaryExpression when unaryExpression.Type.GetGenericTypeDefinition() == typeof(Nullable<>)
+                =>
                 GetValueFromExpression(unaryExpression.Operand),
             _ => throw new InvalidOperationException()
         };
@@ -150,18 +155,18 @@ internal class ConditionExpressionVisitor<T>
 
     private static string GetValueFromConstantExpression(ConstantExpression constantExpression) =>
         constantExpression.Value.ToString();
-        
-    private static string? GetValueOfMemberExpression(MemberExpression expression) => expression.Expression switch
+
+    private static object GetValueOfMemberExpression(MemberExpression expression) => expression.Expression switch
     {
-        ConstantExpression constantExpression => GetValue(expression.Member, constantExpression.Value)?.ToString(),
-        MemberExpression memberExpression => GetValue(expression.Member, GetValueOfMemberExpression(memberExpression))?.ToString(),
-        _ => GetValue(expression.Member, null)?.ToString(),
+        ConstantExpression constantExpression => GetValue(expression.Member, constantExpression.Value),
+        MemberExpression memberExpression => GetValue(expression.Member, GetValueOfMemberExpression(memberExpression)!),
+        _ => GetValue(expression.Member, null)
     };
 
     private static object GetValue(MemberInfo memberInfo, object obj) => memberInfo switch
     {
         FieldInfo fieldInfo => fieldInfo.GetValue(obj),
-        PropertyInfo propertyInfo => propertyInfo.GetValue(obj, default),
+        PropertyInfo propertyInfo => propertyInfo.GetValue(obj),
         _ => throw new InvalidOperationException($"Cannot get the value for object {obj}")
     };
         
