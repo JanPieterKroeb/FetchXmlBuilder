@@ -8,7 +8,7 @@ internal class Order
     internal Order(string attribute)
     {
         Attribute = attribute;
-        IsDescending = true;
+        IsDescending = false;
     }
 
     internal Order(string attribute, bool isDescending)

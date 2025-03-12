@@ -43,6 +43,13 @@ public class EntityFetchXmlBuilder<T, TEntityQuery>(string entityName) : IFetchX
         return this;
     }
 
+    public IFetchXmlQueryMethods<T> OrderBy(Expression<Func<T, object>> fieldExpression, bool isDescending = false)
+    {
+        var orderPropertyName = ExtractPropertyName(fieldExpression);
+        QueryStringBuilder.AddOrder(new Order(orderPropertyName, isDescending));
+        return this;
+    }
+
     public IFetchXmlQueryMethods<T> FilterByHierarchy(Expression<Func<T, object>> primaryKeyExpression,
         Guid primaryKeyValue,
         HierarchyFilterOptions option)

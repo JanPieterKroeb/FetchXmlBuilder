@@ -1,3 +1,4 @@
+using FetchXmlBuilder;
 using FluentAssertions;
 using TestProject1.FilterTests.DataModel;
 
@@ -5,14 +6,13 @@ namespace TestProject1.FilterTests;
 
 public class SimpleFilterTests
 {
-    private readonly FetchXmlBuilder.QueryBuilder _entityToFetchXmlBuilder = new();
+    private readonly QueryBuilder _entityToFetchXmlBuilder = new();
 
     [Test]
     public void BinaryExpressionTest_()
     {
         var artistId = Guid.NewGuid();
-        var actual = _entityToFetchXmlBuilder
-            .For<Song>("song")
+        var actual = _entityToFetchXmlBuilder.For<Song>("song")
             .Filter(s => s.Name == "Tyler The Creator")
             .Filter(s => s.ArtistId == artistId)
             .ToFetchXmlString();
@@ -24,8 +24,7 @@ public class SimpleFilterTests
     [Test]
     public void BoolField_Test()
     {
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Song>("song")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Song>("song")
             .Filter(a => a.IsOnSpotify)
             .ToFetchXmlString();
         const string expected2 =
@@ -36,8 +35,7 @@ public class SimpleFilterTests
     [Test]
     public void BoolField_NegationTest()
     {
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Song>("song")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Song>("song")
             .Filter(a => !a.IsOnSpotify)
             .ToFetchXmlString();
         const string expected2 =
@@ -48,8 +46,7 @@ public class SimpleFilterTests
     [Test]
     public void MultipleConditionsTest()
     {
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Song>("song")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Song>("song")
             .Filter(a => a.Name.StartsWith("Cry for") && a.IsOnSpotify)
             .LinkEntity<Artist>(
                 s => s.For<Artist>(song => song.Artist, null),
@@ -64,8 +61,7 @@ public class SimpleFilterTests
     [Test]
     public void NullableConditionTest()
     {
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Song>("song")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Song>("song")
             .Filter(a => a.ListenAmount == 500)
             .ToFetchXmlString();
         const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"song\"><all-attributes /><filter><condition attribute=\"ListenAmount\" operator=\"eq\" value=\"500\" /></filter></entity></fetch>";
@@ -73,14 +69,23 @@ public class SimpleFilterTests
     }
 
     [Test]
-    public void FilterByObjectsFieldValue()
+    public void FilterByAnonymousObjectsFieldValue()
     {
         var anonymousMatchingObject = new { Name = "Pandora" };
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Company>("company")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Company>("company")
             .Filter(c => c.Name == anonymousMatchingObject.Name)
             .ToFetchXmlString();
-        var expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"company\"><all-attributes /><filter><condition attribute=\"Name\" operator=\"eq\" value=\"Pandora\" /></filter></entity></fetch>";
+        const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"company\"><all-attributes /><filter><condition attribute=\"Name\" operator=\"eq\" value=\"Pandora\" /></filter></entity></fetch>";
         actualXmlString.Should().BeEquivalentTo(expected);
+    }
+    
+    [Test]
+    public void FilterByObjectsFieldValue()
+    {
+        var matchingObject = new Company(Guid.NewGuid(), "Name", null, null);
+        var actualXmlString = _entityToFetchXmlBuilder.For<Company>("company")
+            .Filter(c => c.Name!.StartsWith(matchingObject.Name!))
+            .ToFetchXmlString();
+        var t = "";
     }
 }

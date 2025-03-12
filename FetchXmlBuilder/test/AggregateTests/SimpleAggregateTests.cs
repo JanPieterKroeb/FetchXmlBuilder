@@ -12,8 +12,7 @@ public class SimpleAggregateTests
     [Test]
     public void Aggregate_DistinctColumnCount()
     {
-        var actual = _aggregateQueryBuilder
-            .AggregateFor<Company>("company", true)
+        var actual = _aggregateQueryBuilder.AggregateFor<Company>("company", true)
             .Aggregate(c => c.CompanyName, AggregateOperation.CountColumn, "uniqueCompanyNameAmount", true)
             .ToFetchXmlString();
 
@@ -24,8 +23,7 @@ public class SimpleAggregateTests
     [Test]
     public void Aggregate_Average()
     {
-        var actual = _aggregateQueryBuilder
-            .AggregateFor<Person>("person", false)
+        var actual = _aggregateQueryBuilder.AggregateFor<Person>("person", false)
             .Aggregate(p => p.Salary, AggregateOperation.Average, "averageSalary", false)
             .ToFetchXmlString();
 
@@ -36,8 +34,7 @@ public class SimpleAggregateTests
     [Test]
     public void Aggregate_HasFilter_MaxAvgAndMinRange()
     {
-        var actual = _aggregateQueryBuilder
-            .AggregateFor<Person>("person", false)
+        var actual = _aggregateQueryBuilder.AggregateFor<Person>("person", false)
             .Aggregate(p => p.Salary, AggregateOperation.Min, "minSalary", false)
             .Aggregate(p => p.Salary, AggregateOperation.Max, "maxSalary", false)
             .Aggregate(p => p.Salary, AggregateOperation.Average, "averageSalary", false)
@@ -52,8 +49,7 @@ public class SimpleAggregateTests
     [Test]
     public void a()
     {
-        _aggregateQueryBuilder
-            .AggregateFor<AccountXmlRequestFields>("account", false)
+        _aggregateQueryBuilder.AggregateFor<AccountXmlRequestFields>("account", false)
             .Aggregate(a => a.accountnumber, AggregateOperation.CountColumn,
                 "amountOfAccounts", false);
     }

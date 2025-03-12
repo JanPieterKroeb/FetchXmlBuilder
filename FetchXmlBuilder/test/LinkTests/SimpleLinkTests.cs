@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FetchXmlBuilder;
+using FluentAssertions;
 using TestProject1.FilterTests.DataModel;
 using TestProject1.LinkTests.DataModel;
 
@@ -6,13 +7,12 @@ namespace TestProject1.LinkTests;
 
 public class SimpleLinkTests
 {
-    private readonly FetchXmlBuilder.QueryBuilder _entityToFetchXmlBuilder = new();
+    private readonly QueryBuilder _entityToFetchXmlBuilder = new();
 
     [Test]
     public void SingleLinkTest()
     {
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Song>("song")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Song>("song")
             .LinkEntity<Artist>(
                 s => s.For<Artist>(song => song.Artist),
                 a => a.Id,
@@ -25,8 +25,7 @@ public class SimpleLinkTests
     [Test]
     public void SingleLinkTest_WithAlias()
     {
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Song>("song")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Song>("song")
             .LinkEntity<Artist>(
                 s => s.For<Artist>(song => song.Artist, "spotify_artist"),
                 a => a.Id,
@@ -39,8 +38,7 @@ public class SimpleLinkTests
     [Test]
     public void SingleLinkTest_WithNullableEntity()
     {
-        var actualXmlString = _entityToFetchXmlBuilder
-            .For<Movie>("movie")
+        var actualXmlString = _entityToFetchXmlBuilder.For<Movie>("movie")
             .LinkEntity<Director>(
                 s => s.For<Director>(m => m.Director, "test"),
                 d => d.PersonId,

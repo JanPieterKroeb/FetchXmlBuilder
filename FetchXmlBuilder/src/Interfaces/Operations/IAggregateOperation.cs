@@ -4,7 +4,7 @@ using FetchXmlBuilder.Domain.Enums;
 
 namespace FetchXmlBuilder.Interfaces.Operations;
 
-public interface IAggregateOperation<out TXmlCondition, T> : IFilterOperation<TXmlCondition, T>
+public interface IAggregateOperation<out TXmlCondition, T> : IOperations<TXmlCondition, T>
 {
     /// <summary>
     /// Creates attribute:<para>
