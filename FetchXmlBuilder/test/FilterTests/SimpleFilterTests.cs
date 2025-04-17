@@ -82,7 +82,7 @@ public class SimpleFilterTests
     [Test]
     public void FilterByObjectsFieldValue()
     {
-        var matchingObject = new Company(Guid.NewGuid(), "Name", null, null);
+        var matchingObject = new Company(Guid.NewGuid(), "Name", null, null, "");
         var actualXmlString = _entityToFetchXmlBuilder.For<Company>("company")
             .Filter(c => c.Name!.StartsWith(matchingObject.Name!))
             .ToFetchXmlString();

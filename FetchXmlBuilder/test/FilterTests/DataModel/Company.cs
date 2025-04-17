@@ -4,4 +4,5 @@ public record Company(
     Guid Id,
     string? Name,
     Guid? ParentCompanyId,
-    Company? ParentCompany);
+    Company? ParentCompany,
+    string PostalCode);

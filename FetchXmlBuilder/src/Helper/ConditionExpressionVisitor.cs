@@ -93,30 +93,40 @@ internal class ConditionExpressionVisitor<T>
         }
 
         var value = GetValueFromExpression(expressionWithValue);
-        var @operator = binaryExpression.NodeType switch
-        {
-            ExpressionType.Equal => value != null ? XmlOperations.Equal : XmlOperations.IsNull,
-            ExpressionType.NotEqual => value != null ? XmlOperations.NotEqual : XmlOperations.IsNotNull,
-            ExpressionType.LessThan => XmlOperations.LessThan,
-            ExpressionType.LessThanOrEqual => XmlOperations.LessThanOrEqual,
-            ExpressionType.GreaterThan => XmlOperations.GreaterThan,
-            ExpressionType.GreaterThanOrEqual => XmlOperations.GreaterThanOrEqual,
-            _ => throw new NotImplementedException("Unsupported binary expression!")
-        };
+        var expressionType = binaryExpression.NodeType;
+        // var @operator = expressionType switch
+        // {
+        //     ExpressionType.Equal => value != null ? XmlOperations.Equal : XmlOperations.IsNull,
+        //     ExpressionType.NotEqual => value != null ? XmlOperations.NotEqual : XmlOperations.IsNotNull,
+        //     ExpressionType.LessThan => XmlOperations.LessThan,
+        //     ExpressionType.LessThanOrEqual => XmlOperations.LessThanOrEqual,
+        //     ExpressionType.GreaterThan => XmlOperations.GreaterThan,
+        //     ExpressionType.GreaterThanOrEqual => XmlOperations.GreaterThanOrEqual,
+        //     _ => throw new NotImplementedException("Unsupported binary expression!")
+        // };
         if (negate)
         {
-            @operator = @operator switch
+            expressionType = expressionType switch
             {
-                XmlOperations.Equal => XmlOperations.NotEqual,
-                XmlOperations.NotEqual => XmlOperations.Equal,
-                XmlOperations.IsNull => XmlOperations.IsNotNull,
-                XmlOperations.IsNotNull => XmlOperations.IsNull,
-                _ => throw new ArgumentOutOfRangeException("Unsupported negation!")
+                ExpressionType.Equal => ExpressionType.NotEqual,
+                ExpressionType.NotEqual => ExpressionType.Equal,
+                ExpressionType.LessThan => ExpressionType.GreaterThanOrEqual,
+                ExpressionType.LessThanOrEqual => ExpressionType.GreaterThan,
+                ExpressionType.GreaterThan => ExpressionType.LessThanOrEqual,
+                ExpressionType.GreaterThanOrEqual => ExpressionType.LessThan
             };
+            // @operator = @operator switch
+            // {
+            //     XmlOperations.Equal => XmlOperations.NotEqual,
+            //     XmlOperations.NotEqual => XmlOperations.Equal,
+            //     XmlOperations.IsNull => XmlOperations.IsNotNull,
+            //     XmlOperations.IsNotNull => XmlOperations.IsNull,
+            //     _ => throw new ArgumentOutOfRangeException("Unsupported negation!")
+            // };
         }
 
 
-        return new Condition(memberExpression.Member.Name, @operator, value ?? "");
+        return new Condition(memberExpression.Member.Name, expressionType, value);
     }
 
     private static Condition GetConditionFromMethodCallExpression(MethodCallExpression methodExpression, bool negate)

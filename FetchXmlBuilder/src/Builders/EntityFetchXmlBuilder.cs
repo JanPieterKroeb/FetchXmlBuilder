@@ -25,6 +25,12 @@ public class EntityFetchXmlBuilder<T, TEntityQuery>(string entityName) : IFetchX
         return this;
     }
 
+    public IFetchXmlQueryMethods<T> Filter(Expression<Func<T, object>> fieldExpression, ExpressionType expressionType, object value)
+    {
+        QueryStringBuilder.AddCondition(new Condition(ExtractPropertyName(fieldExpression), expressionType, value.ToString()));
+        return this;
+    }
+
     public IFetchXmlQueryMethods<T> LinkEntity<TLinkEntity>(
         Expression<Func<ILinkEntityResource<T>, object>> expandExpressionString,
         Expression<Func<TLinkEntity, object>> fromExpression,

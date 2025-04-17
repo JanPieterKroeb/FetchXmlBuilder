@@ -29,7 +29,7 @@ public abstract class EntityQuery
             xmlString += "<filter>";
             foreach (var condition in ConditionsAnd)
             {
-                xmlString += $"<condition attribute=\"{condition.Attribute}\" operator=\"{condition.Operator}\" value=\"{condition.Value}\" />";
+                xmlString += $"<condition attribute=\"{condition.Attribute}\" operator=\"{condition.Operator}\" value=\"{condition.Value ?? ""}\" />";
             }
             
             xmlString += "</filter>";
