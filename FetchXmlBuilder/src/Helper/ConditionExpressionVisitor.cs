@@ -97,6 +97,10 @@ internal class ConditionExpressionVisitor<T>
         {
             ExpressionType.Equal => value != null ? XmlOperations.Equal : XmlOperations.IsNull,
             ExpressionType.NotEqual => value != null ? XmlOperations.NotEqual : XmlOperations.IsNotNull,
+            ExpressionType.LessThan => XmlOperations.LessThan,
+            ExpressionType.LessThanOrEqual => XmlOperations.LessThanOrEqual,
+            ExpressionType.GreaterThan => XmlOperations.GreaterThan,
+            ExpressionType.GreaterThanOrEqual => XmlOperations.GreaterThanOrEqual,
             _ => throw new NotImplementedException("Unsupported binary expression!")
         };
         if (negate)
@@ -106,7 +110,8 @@ internal class ConditionExpressionVisitor<T>
                 XmlOperations.Equal => XmlOperations.NotEqual,
                 XmlOperations.NotEqual => XmlOperations.Equal,
                 XmlOperations.IsNull => XmlOperations.IsNotNull,
-                XmlOperations.IsNotNull => XmlOperations.IsNull
+                XmlOperations.IsNotNull => XmlOperations.IsNull,
+                _ => throw new ArgumentOutOfRangeException("Unsupported negation!")
             };
         }
 
