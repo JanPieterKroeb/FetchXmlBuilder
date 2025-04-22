@@ -42,7 +42,7 @@ public abstract class EntityQuery
         // Build ordering
         foreach (var order in Orders)
         {
-            xmlString += $"<order attribute=\"{order.Attribute}\" descending=\"{order.IsDescending}\" />";
+            xmlString += $"<order attribute=\"{order.Attribute}\" descending=\"{order.IsDescending.ToString().ToLower()}\" />";
         }
         // Build linked entities
         foreach (var linkEntity in LinkEntities)

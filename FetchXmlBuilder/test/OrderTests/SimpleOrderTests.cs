@@ -14,7 +14,7 @@ public class SimpleOrderTests
         var request = _entityToFetchXmlBuilder.For<Dog>("dogs")
             .OrderBy(d => d.Name)
             .ToFetchXmlString();
-        const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"dogs\"><all-attributes /><order attribute=\"Name\" descending=\"False\" /></entity></fetch>";
+        const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"dogs\"><all-attributes /><order attribute=\"Name\" descending=\"false\" /></entity></fetch>";
         request.Should().BeEquivalentTo(expected);
     }
     
@@ -29,7 +29,7 @@ public class SimpleOrderTests
                 f => f.Id,
                 d => d.FatherId)
             .ToFetchXmlString();
-        const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"dogs\"><all-attributes /><filter><condition attribute=\"Name\" operator=\"like\" value=\"Las%\" /></filter><order attribute=\"Name\" descending=\"True\" /><link-entity name=\"Father\" from=\"Id\" to=\"FatherId\" link-type=\"outer\" alias=\"Father\"><all-attributes /></link-entity></entity></fetch>";
+        const string expected = "<fetch returntotalrecordcount=\"true\"><entity name=\"dogs\"><all-attributes /><filter><condition attribute=\"Name\" operator=\"like\" value=\"Las%\" /></filter><order attribute=\"Name\" descending=\"true\" /><link-entity name=\"Father\" from=\"Id\" to=\"FatherId\" link-type=\"outer\" alias=\"Father\"><all-attributes /></link-entity></entity></fetch>";
         request.Should().BeEquivalentTo(expected);
     }
 }
